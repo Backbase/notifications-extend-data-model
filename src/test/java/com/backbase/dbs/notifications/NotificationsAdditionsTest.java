@@ -7,13 +7,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.backbase.dbs.notifications.rest.spec.v2.notifications.NotificationsPostRequestBody;
 import com.backbase.dbs.notifications.rest.spec.v2.notifications.Recipient;
 import com.backbase.dbs.notifications.rest.spec.v2.notifications.SeverityLevel;
+import com.backbase.dbs.notifications.rest.spec.v2.notifications.TargetGroup;
 import com.backbase.dbs.presentation.services.notifications.Application;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import java.util.HashMap;
 import java.util.Map;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -112,11 +113,16 @@ public class NotificationsAdditionsTest {
     }
 
     private NotificationsPostRequestBody createNotificationsPostRequestBody() {
-        return new NotificationsPostRequestBody()
-            .withMessage("Message")
-            .withLevel(SeverityLevel.INFO)
-            .withTargetGroup(NotificationsPostRequestBody.TargetGroup.USER)
-            .withRecipients(singletonList(new Recipient().withUserId("U000011")))
-            .withOrigin("actions");
+        Recipient recipient = new Recipient();
+        recipient.setUserId("U000011");
+
+        NotificationsPostRequestBody notificationsPostRequestBody = new NotificationsPostRequestBody();
+        notificationsPostRequestBody.setMessage("Message");
+        notificationsPostRequestBody.setLevel(SeverityLevel.INFO);
+        notificationsPostRequestBody.setTargetGroup(TargetGroup.USER);
+        notificationsPostRequestBody.setRecipients(singletonList(recipient));
+        notificationsPostRequestBody.setOrigin("actions");
+
+        return notificationsPostRequestBody;
     }
 }
